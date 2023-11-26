@@ -9,7 +9,7 @@ module.exports = class Binance {
      * @returns {Promise} Response promise.
      */
     exchangeInfo() {
-        return this.request('/api/v1/exchangeInfo')
+        return this.request('/api/v3/exchangeInfo')
     }
 
     /**
@@ -22,7 +22,7 @@ module.exports = class Binance {
      * @returns {Promise} Resopnse promise.
      */
     klines(symbol, interval, startTime, endTime, limit) {
-        return this.request('/api/v1/klines', { qs: { symbol, interval, startTime, endTime, limit } })
+        return this.request('/api/v3/klines', { qs: { symbol, interval, startTime, endTime, limit } })
     }
 
     /**

@@ -228,9 +228,9 @@ class UDF {
         to *= 1000
 
         while (true) {
-            const klines = await this.binance.klines(symbol, interval, from, to, 500)
+            const klines = await this.binance.klines(symbol, interval, from, to, 1000)
             totalKlines = totalKlines.concat(klines)
-            if (klines.length == 500) {
+            if (klines.length == 1000) {
                 from = klines[klines.length - 1][0] + 1
             } else {
                 if (totalKlines.length === 0) {
@@ -247,6 +247,52 @@ class UDF {
                     }
                 }
             }
+        }
+    }
+
+    async historyConversion(symbolHistory, usdcHistory) {
+        if (symbolHistory.s === 'no_data' || usdcHistory.s === 'no_data') {
+            return {s: 'no_data'}
+        }
+
+        /**
+         * For the daily candle chart, Binance is not returning
+         * early data for USDCUSDT symbol so starting date
+         * of the first history is way before than USDCUSDT
+         * starting date. Using this function we ensure
+         * to work with the same Axis values.
+         */
+        function normalizeArrays(a, b) {
+            let newA = a
+            let newB = b
+
+            if (a.length > b.length) {
+                newA = a.slice(a.length - b.length)
+            } else if (a.length < b.length) (
+                newB = b.slice(b.length - a.length)
+            )
+
+            return [newA, newB]
+        }
+
+        function convert(fromValues, conversionValues) {
+            const [sFromValues, sConversionValues] =
+                normalizeArrays(fromValues, conversionValues)
+
+            return sFromValues.map((b, k) => {
+                const ratio = sConversionValues[k]
+                return b * (1 / ratio)
+            })
+        }
+
+        return {
+            s: 'ok',
+            t: normalizeArrays(symbolHistory.t, usdcHistory.t)[0],
+            c: convert(symbolHistory.c, usdcHistory.c),
+            o: convert(symbolHistory.o, usdcHistory.o),
+            h: convert(symbolHistory.h, usdcHistory.h),
+            l: convert(symbolHistory.l, usdcHistory.l),
+            // v: symbolHistory.v
         }
     }
 }

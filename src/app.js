@@ -66,13 +66,29 @@ app.get('/history', [
     query.from,
     query.to,
     query.resolution
-], (req, res, next) => {
-    handlePromise(res, next, udf.history(
+], async (req, res, next) => {
+    if (!req.query.symbol.includes('USDT'))
+        return handlePromise(res, next, udf.history(
         req.query.symbol,
         req.query.from,
         req.query.to,
         req.query.resolution
-    ))
+        ))
+
+    const history = await udf.history(
+        req.query.symbol,
+        req.query.from,
+        req.query.to,
+        req.query.resolution
+    )
+    const usdcHistory = await udf.history(
+        "USDCUSDT",
+        req.query.from,
+        req.query.to,
+        req.query.resolution
+    )
+
+    return handlePromise(res, next, udf.historyConversion(history, usdcHistory))
 })
 
 // Handle errors
