@@ -281,7 +281,7 @@ class UDF {
 
             return sFromValues.map((b, k) => {
                 const ratio = sConversionValues[k]
-                return b * (1 / ratio)
+                return (b * (1 / ratio)).toFixed(3)
             })
         }
 
