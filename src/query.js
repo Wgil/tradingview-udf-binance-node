@@ -69,6 +69,11 @@ module.exports = {
         next()
     },
 
+    symbols(req, res, next) {
+        mandatory(req, 'symbols')
+        next()
+    },
+
     query(req, res, next) {
         mandatory(req, 'query', /^.+$/)
         next()

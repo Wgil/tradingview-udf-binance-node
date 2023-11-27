@@ -45,6 +45,10 @@ app.get('/symbols', [query.symbol], (req, res, next) => {
     handlePromise(res, next, udf.symbol(req.query.symbol))
 })
 
+app.get('/quotes', [query.symbols], (req, res, next) => {
+    handlePromise(res, next, udf.quotes(req.query.symbols))
+})
+
 app.get('/search', [query.query, query.limit], (req, res, next) => {
     if (req.query.type === '') {
         req.query.type = null

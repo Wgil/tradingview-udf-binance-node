@@ -295,6 +295,35 @@ class UDF {
             // v: symbolHistory.v
         }
     }
+
+    async quotes(symbol) {
+        const statistics = await this.binance.tickerPriceChange(symbol)
+
+        return {
+            s: 'ok',
+            d: [
+                {
+                    "s": "ok",
+                    "n": statistics.symbol,
+                    "v": {
+                        "ch": statistics.priceChange,
+                        "chp": statistics.priceChangePercent,
+                        "short_name": statistics.priceChangePercent,
+                        "exchange": "Binance",
+                        "description": statistics.symbol,
+                        "lp": statistics.lastPrice,
+                        "ask": statistics.askPrice,
+                        "bid": statistics.bidPrice,
+                        "open_price": statistics.openPrice,
+                        "high_price": statistics.highPrice,
+                        "low_price": statistics.lowPrice,
+                        "prev_close_price": statistics.prevClosePrice,
+                        "volume": statistics.volume
+                    }
+                },
+            ]
+        }
+    }
 }
 
 UDF.Error = UDFError

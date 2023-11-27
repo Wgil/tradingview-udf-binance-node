@@ -13,6 +13,24 @@ module.exports = class Binance {
     }
 
     /**
+     * 24 hour rolling window price change statistics.
+     * Careful when accessing this with no symbol.
+     * * @param {string} symbol - Trading symbol.
+     * @returns {Promise} Response promise.
+     */
+    async tickerPriceChange(symbols) {
+        try {
+
+            const response = await this.request(`/api/v3/ticker/24hr?symbol=${symbols}`)
+            console.log(response)
+            return response
+        } catch(error) {
+            console.log(error)
+            return error
+        }
+    }
+
+    /**
      * Kline/candlestick bars for a symbol. Klines are uniquely identified by their open time.
      * @param {string} symbol - Trading symbol.
      * @param {string} interval - Klines interval.
