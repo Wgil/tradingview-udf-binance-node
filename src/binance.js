@@ -22,7 +22,7 @@ module.exports = class Binance {
         try {
 
             const response = await this.request(`/api/v3/ticker/24hr?symbol=${symbols}`)
-            console.log(response)
+
             return response
         } catch(error) {
             console.log(error)

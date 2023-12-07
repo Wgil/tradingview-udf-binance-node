@@ -298,6 +298,11 @@ class UDF {
 
     async quotes(symbol) {
         const statistics = await this.binance.tickerPriceChange(symbol)
+        const conversion = await this.binance.tickerPriceChange("USDCUSDT")
+
+        const priceChange = (+statistics.priceChangePercent) / 100
+        const conversionPriceChange = (+conversion.priceChangePercent) / 100
+        const convertedPriceChange = ((priceChange - conversionPriceChange) * 100).toFixed(3)
 
         return {
             s: 'ok',
@@ -306,19 +311,19 @@ class UDF {
                     "s": "ok",
                     "n": statistics.symbol,
                     "v": {
-                        "ch": statistics.priceChange,
-                        "chp": statistics.priceChangePercent,
-                        "short_name": statistics.priceChangePercent,
+                        // "ch": statistics.priceChange,
+                        "chp": convertedPriceChange,
+                        "short_name": convertedPriceChange,
                         "exchange": "Binance",
                         "description": statistics.symbol,
-                        "lp": statistics.lastPrice,
-                        "ask": statistics.askPrice,
-                        "bid": statistics.bidPrice,
-                        "open_price": statistics.openPrice,
-                        "high_price": statistics.highPrice,
-                        "low_price": statistics.lowPrice,
-                        "prev_close_price": statistics.prevClosePrice,
-                        "volume": statistics.volume
+                        // "lp": statistics.lastPrice,
+                        // "ask": statistics.askPrice,
+                        // "bid": statistics.bidPrice,
+                        // "open_price": statistics.openPrice,
+                        // "high_price": statistics.highPrice,
+                        // "low_price": statistics.lowPrice,
+                        // "prev_close_price": statistics.prevClosePrice,
+                        // "volume": statistics.volume
                     }
                 },
             ]
